@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:music_player/songs.dart';
 import 'package:music_player/theme.dart';
 
 void main() => runApp(MyApp());
@@ -22,7 +25,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Album Title'),
     );
   }
 }
@@ -74,7 +77,19 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           //Seek bar
           new Expanded(
-            child: new Container(),
+            child: new Center(
+              child: Container(
+                height: 125.0,
+                width: 125.0,
+                child: ClipOval(
+                  clipper: CircleClipper(),
+                  child: Image.network(
+                    demoPlaylist.songs[0].albumArtUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
           ),
 
           //Visualizer
@@ -118,6 +133,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: <Widget>[
                         new Expanded(child: new Container()),
                         new IconButton(
+                            splashColor: lightAccentColor,
+                            highlightColor: Colors.transparent,
                             icon: new Icon(Icons.skip_previous,
                                 color: Colors.white, size: 24.0),
                             onPressed: () {}),
@@ -141,6 +158,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         new Expanded(child: new Container()),
                         new IconButton(
+                            splashColor: lightAccentColor,
+                            highlightColor: Colors.transparent,
                             icon: new Icon(Icons.skip_next,
                                 color: Colors.white, size: 24.0),
                             onPressed: () {}),
@@ -155,5 +174,20 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
+  }
+}
+
+class CircleClipper extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromCircle(
+      center: Offset(size.width / 2, size.height / 2),
+      radius: min(size.width, size.height) / 2,
+    );
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    return true;
   }
 }
